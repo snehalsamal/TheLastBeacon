@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Last Beacon — Survival Coordinator</title>
+  <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+<header class="top">
+ <div><h1>☢ THE LAST BEACON</h1><div class="muted">PLAN • SURVIVE • REACH</div></div>
+ <div class="status">● OFFLINE SIMULATION · LOCAL DEMO</div>
+ <div style="text-align:right"><b>DAY 19</b><div class="muted" id="clock">12:00</div></div>
+</header>
+
+<main>
+<aside>
+ <section class="panel">
+  <h2>◈ SURVIVOR STATUS</h2>
+  <div class="person"><div class="avatar">🧑🏻</div><div class="person-info"><b>Aarav</b><div class="person-meta"><span>Health</span><b id="ah">82%</b></div><div class="meter"><div class="fill" id="ahbar" style="width:82%"></div></div><div class="person-meta"><span>Stamina</span><b id="as">68%</b></div><div class="meter"><div class="fill am" id="asbar" style="width:68%"></div></div></div></div>
+  <div class="person"><div class="avatar">👩🏻</div><div class="person-info"><b>Mira</b><div class="person-meta"><span>Health</span><b id="mh">91%</b></div><div class="meter"><div class="fill" id="mhbar" style="width:91%"></div></div><div class="person-meta"><span>Stamina</span><b id="ms">76%</b></div><div class="meter"><div class="fill am" id="msbar" style="width:76%"></div></div></div></div>
+ </section>
+ <section class="panel" style="margin-top:14px">
+  <h2>⬡ MISSION BRIEF</h2><b>Reach the survivor settlement</b>
+  <p class="muted">Follow the beacon signal. Avoid high-risk zones. Keep both survivors alive.</p>
+  <div class="radio"><b>◉ RADIO SIGNAL</b><p><i>“...last beacon... head north... repeat... head north...”</i></p><div class="meter"><div class="fill" style="width:72%"></div></div><small>Signal strength: 72%</small></div>
+ </section>
+</aside>
+
+<section class="panel center">
+ <div class="map-head"><b>◉ CITY ROUTE MAP</b><div class="legend">🟢 Planned &nbsp; 🔴 Threat &nbsp; 🟠 Detour &nbsp; 🔵 Beacon</div></div>
+ <div class="map" id="map">
+  <div class="river"></div>
+  <div class="zone red" style="left:10%;top:10%;width:22%;height:22%">☣<br>HORDE ACTIVITY</div>
+  <div class="zone red" style="right:5%;top:28%;width:20%;height:23%">☣<br>CENTRAL RUINS</div>
+  <div class="zone red" style="right:10%;bottom:4%;width:25%;height:21%">☣<br>INDUSTRIAL ZONE</div>
+  <div class="zone yellow" style="left:48%;top:55%;width:18%;height:17%">⚠<br>OLD FACTORY</div>
+
+  <svg class="route-line" viewBox="0 0 800 620" preserveAspectRatio="none">
+   <path id="routePath" d="M80 550 L150 500 L210 455 L280 420 L330 350 L370 300 L410 260 L490 220 L550 160 L610 120 L690 70"/>
+   <path class="alt" id="detourPath" d="M80 550 L190 570 L330 535 L460 470 L570 420 L690 70"/>
+  </svg>
+
+  <div class="pin destination-pin" id="groceryPin" style="left:30%;top:67%;border-color:var(--purple)">▣</div>
+  <div class="map-label" style="left:31%;top:68%">Grocery Store</div>
+  <div class="pin destination-pin" id="safePin" style="left:48%;top:48%;border-color:var(--blue)">⌂</div>
+  <div class="map-label" style="left:49%;top:49%">Safe House</div>
+  <div class="pin destination-pin" id="beaconPin" style="left:86%;top:12%;border-color:var(--blue)">⌁</div>
+  <div class="map-label" style="right:3%;top:14%">FINAL BEACON</div>
+  <div class="pin threat" style="left:21%;top:21%">☣</div>
+  <div class="pin threat" style="left:79%;top:39%">☣</div>
+
+  <!-- Three actual zombie characters on the road -->
+  <div class="pin zombie" id="zombie1" style="left:35%;top:61%">🧟</div>
+  <div class="pin zombie" id="zombie2" style="left:40%;top:56%">🧟</div>
+  <div class="pin zombie" id="zombie3" style="left:44%;top:52%">🧟</div>
+  <div class="map-label" id="zombieLabel" style="left:32%;top:45%;display:none;border-color:var(--red);color:#ff8490">🚨 ZOMBIES BLOCK THE ROAD</div>
+
+  <div class="pin" id="detourStopPin" style="display:none;left:31%;top:83%;border-color:var(--amber);background:#3b2a10;font-size:18px">🌿</div>
+  <div class="map-label" id="detourStopLabel" style="display:none;left:33%;top:84%;border-color:var(--amber);color:#ffd08a">SOUTHERN DETOUR STOP</div>
+  <div class="pin survivor-marker" id="survivorMarker" style="left:10%;top:89%">⌖</div>
+  <div class="map-label" id="survivorLabel" style="left:12%;top:87%">YOU ARE HERE</div>
+ </div>
+ <div class="map-caption" id="mapCaption">Fictional city map · Route choices and threats are simulated.</div>
+</section>
+
+<aside class="rightcol">
+ <section class="panel">
+  <h2>▣ SUPPLY INVENTORY <span class="muted" id="weight" style="float:right">19 / 30 units</span></h2>
+  <div class="supply"><span>🥫 Food</span><div class="qty"><button class="tiny" onclick="changeSupply('food',-1)">−</button><b id="food">6</b><button class="tiny" onclick="changeSupply('food',1)">+</button></div></div>
+  <div class="supply"><span>💧 Water</span><div class="qty"><button class="tiny" onclick="changeSupply('water',-1)">−</button><b id="water">7</b><button class="tiny" onclick="changeSupply('water',1)">+</button></div></div>
+  <div class="supply"><span>🩹 Medkits</span><div class="qty"><button class="tiny" onclick="changeSupply('medkits',-1)">−</button><b id="medkits">2</b><button class="tiny" onclick="changeSupply('medkits',1)">+</button></div></div>
+  <div class="supply"><span>🔋 Battery</span><div class="qty"><button class="tiny" onclick="changeSupply('battery',-1)">−</button><b id="battery">4</b><button class="tiny" onclick="changeSupply('battery',1)">+</button></div></div>
+ </section>
+ <section class="panel">
+  <h2>⚠ THREAT INTELLIGENCE</h2>
+  <div class="threat-row"><span>☣</span><div><b style="color:var(--red)">North Block</b><div class="muted" id="northThreat">Horde activity · High risk</div></div></div>
+  <div class="threat-row"><span>⚠</span><div><b style="color:var(--amber)">Old Factory</b><div class="muted" id="factoryThreat">Unstable · Moderate risk</div></div></div>
+  <button style="width:100%;margin-top:8px" onclick="simulateThreat()">⚡ Simulate threat update</button>
+ </section>
+ <section class="panel">
+  <h2>➤ RECOMMENDED ROUTE</h2>
+  <div class="route-step"><span class="step-num">1</span><div class="step-text"><b>Grocery Store</b><small>Collect supplies · 1.2 km</small></div></div>
+  <div class="route-step"><span class="step-num">2</span><div class="step-text"><b>Safe House</b><small>Rest and reassess · 1.8 km</small></div></div>
+  <div class="route-step"><span class="step-num">3</span><div class="step-text"><b>Final Beacon</b><small>Reach settlement · 4.2 km</small></div></div>
+  <button class="primary" style="width:100%;margin-top:10px" onclick="openDecision()">Choose next move →</button>
+ </section>
+</aside>
+
+<section class="bottom">
+ <div class="panel"><h2>⚡ QUICK ACTIONS</h2><div class="actions"><button class="primary" onclick="openDecision()">⌖ Plan next move</button><button onclick="simulateThreat()">⚠ Update threats</button><button onclick="logEvent('Manual journal entry added.')">▤ Log event</button></div><p class="muted" style="font-size:11px">Decisions affect supplies, stamina, health and route risk.</p></div>
+ <div class="panel"><h2>◷ SURVIVAL JOURNAL</h2><div class="events" id="events"><div class="event"><i></i><span>12:00 — Beacon signal detected.</span></div><div class="event"><i></i><span>11:42 — Found a safe route marker.</span></div><div class="event"><i></i><span>11:10 — Avoided horde activity in the north.</span></div></div></div>
+</section>
+</main>
+
+<div class="footer"><span>THE LAST BEACON · HACKATHON PROTOTYPE</span><span>Fictional survival simulation.</span><button onclick="resetDemo()">Reset demo</button></div>
+<div class="toast" id="toast"></div>
+
+<div class="modal-back" id="modal">
+ <div class="modal">
+  <h2 id="modalTitle">Choose your next move</h2>
+  <p class="muted" id="modalDescription">Select a plan for Aarav and Mira.</p>
+  <label for="decision">Survival decision</label>
+  <select id="decision">
+   <option value="grocery">Travel to Grocery Store</option>
+   <option value="safe">Travel to Safe House</option>
+   <option value="direct">Take direct route to Final Beacon</option>
+   <option value="detour">Take longer detour</option>
+   <option value="medkit">Use a medkit</option>
+  </select>
+  <div class="modal-actions"><button onclick="closeDecision()">Cancel</button><button class="primary" onclick="applyDecision()">Confirm move</button></div>
+ </div>
+</div>
+  <script src="app.js" defer></script>
+
+</body>
+</html>
